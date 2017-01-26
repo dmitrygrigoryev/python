@@ -1,0 +1,77 @@
+﻿{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+      <meta charset="utf-8">
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">1
+   <title>Менеджер очереди для ANSYS CFD</title>
+    <!-- Bootstrap -->
+   <link link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+ </head>
+ <body>
+     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../">Менеджер очереди</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="/interface/add_task/">Добавить задачу</a></li>
+            <li><a href="../">Очередь</a></li>
+            <li class="active"><a href="#">Мои задачи</a></li>
+            <li><a href="/interface/nodes_info">Расчетные узлы</a></li>
+          </ul>
+		    <div class="navbar-text pull-right"><a href="../interface/logout/">Выйти</a></div>
+			<div class="navbar-text pull-right">У вас {{profile.score|floatformat:2}} баллов</div>
+			
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+<!--table -->
+<div class="container" style="padding-top: 40px;">
+	<h2 class="sub-header">Мои задачи</h2>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Пользователь</th>
+                  <th>CPU</th>
+                  <th>Ram</th>
+                  <th>Опции</th>
+				  <th>В очереди с:</th>
+				  <th>Статус задачи</th>
+                </tr>
+              </thead>
+			  <tbody>
+				{% if task_list %}
+					
+					{% for task in task_list %}
+					<tr>
+						
+						<td>{{ task.id }}</td>
+						<td>{{ task.user_id.username }}</td>
+						<td>{{ task.cpu }} ядер</td>
+						<td>{{ task.ram }} GB</td>	
+						<td>{% if task.prime %}prime, {% endif %}
+							{% if task.moretime %} moretime, {% endif %}
+							{% if task.defnode %} defnode, {% endif %}
+							</td>
+						<td>{{ task.date }}</td>
+						<td>{{ task.status }}</td>
+					</tr>
+					{% endfor %}
+				{% else %}
+					<div class="alert alert-info">В очереди сейчас нет заданий</div>
+				{% endif %}
+</div>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+</body>
+</html>
